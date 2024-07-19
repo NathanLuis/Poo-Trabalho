@@ -3,6 +3,7 @@ from class_item_pedido import ItemPedido
 from class_pedido import Pedido
 from class_pessoa import Pessoa
 from class_produto import Produto
+from class_Nota import Nota
 
 from datetime import datetime
 
@@ -38,10 +39,31 @@ def pedido_adicionar():
     # a numeração do pedido começa de 1 até n
     codido_pedido = int(len(pedidos)) + 1
     return Pedido(codido_pedido, endereco_pedido)
+def exibe_pedidos_em_aberto():
+    count = 1
+    for iterado in pedidos:
+        if iterado.status == 0:
+            print('Aberto Nº ' + str(count))
+            print(iterado.toString())
+            count += 1
+
 
 def finalizar_pedido():
+    exibe_pedidos_em_aberto();
+    selecao = int(input('Insira o CODIGO do Pedido a finalizar \n O pedido que está prestes a finalizar não poderá ser modificado.'))
 
+    pedido_atual = buscar_pedido_por_codigo(selecao)
+    pedido_atual.status = 1
+    print('Pedido finalizado com sucesso! \n Agora insira os dados do cliente e funcionário.')
+    cliente_atual = cadastrar_cliente()
+    funcionario_atual = cadastrar_funcionario()
+    nota_atual = Nota(pedido_atual, cliente_atual, funcionario_atual)
+    print('Nota gerada com sucesso! \n' + nota_atual)
+    historico_notas.append(nota_atual)
 
+#def gera_nota_fiscal():
+
+#def exibe_notas():
 def pedido_adicionar_item():
     int_pedido_selecionado = int(input('Informe o código do pedido para adicionar um novo item: '))
     if buscar_pedido_por_codigo(int_pedido_selecionado):
@@ -152,7 +174,7 @@ def cadastrar_funcionario():
 # Aplicação de exemplo disciplina POO - UFRB
 # Sistema de controle de pedidos
 # Professor Guilherme Braga Araújo
-lista_funcionarios={}
+historico_notas =[]
 estoque_produtos = {}
 pedidos = {}
 
@@ -183,8 +205,10 @@ while True:
                 pedido_remover_item()
             elif (opcao_escolhida == "4"):
                 pedido_listar_items()
-            # elif (opcao_escolhida == "5"):
-            # pedido_finalizar()
+            elif (opcao_escolhida == "5"):
+                finalizar_pedido()
+            elif (opcao_escolhida == "6")
+                exibe_notas()
             else:
                 # Volta para o menu principal
                 break

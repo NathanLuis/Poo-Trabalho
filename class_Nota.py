@@ -1,20 +1,24 @@
-class Pedido:
+import datetime
 
-    def __init__(self, codigoDoPedido, cliente, atendente, valorTotal, horaGerada):
-        self.__codigoDoPedido = codigoDoPedido
+
+class Nota:
+
+    def __init__(self, pedido, cliente, atendente, ):
+        self.__pedido = pedido
         self.__cliente = cliente
         self.__atendente = atendente
-        self.__valorTotal = valorTotal
-        self.__horaGerada = horaGerada
-    
+        self.__horaGerada = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        for iterado in pedido.itens_pedidos:
+            self.__valorTotal += iterado.produto.preco * iterado.quantidade
+
 
     @property
-    def _codigoDoPedido(self):
-        return self.__codigoDoPedido
+    def _pedido(self):
+        return self.__pedido
 
     @_codigoDoPedido.setter
-    def _codigoDoPedido(self, value):
-        self.__codigoDoPedido = value
+    def _pedido(self, value):
+        self.__pedido = value
 
     @property
     def _cliente(self):
@@ -47,3 +51,5 @@ class Pedido:
     @_horaGerada.setter
     def _horaGerada(self, value):
         self.__horaGerada = value
+
+    # def toString(self):       a implementar
