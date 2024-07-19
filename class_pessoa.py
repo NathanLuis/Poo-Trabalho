@@ -46,3 +46,4 @@ class Pessoa:
     @_endereco.setter
     def _endereco(self, value):
         self.__endereco = value
+

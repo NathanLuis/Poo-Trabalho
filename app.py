@@ -1,9 +1,11 @@
 from class_endereco import Endereco
 from class_item_pedido import ItemPedido
 from class_pedido import Pedido
+from class_pessoa import Pessoa
 from class_produto import Produto
 
 from datetime import datetime
+
 
 def menu_principal():  # MENU PRINCIPAL
     print('''
@@ -15,6 +17,7 @@ def menu_principal():  # MENU PRINCIPAL
         [s] - Sair
     ''')
     return str(input('Escolha uma opção: '))
+
 
 def menu_pedido():
     print('''
@@ -28,12 +31,16 @@ def menu_pedido():
     ''')
     return str(input('Escolha uma opção: '))
 
+
 def pedido_adicionar():
     # código pedido gerado automaticamente
     endereco_pedido = cadastrar_endereco()
     # a numeração do pedido começa de 1 até n
     codido_pedido = int(len(pedidos)) + 1
     return Pedido(codido_pedido, endereco_pedido)
+
+def finalizar_pedido():
+
 
 def pedido_adicionar_item():
     int_pedido_selecionado = int(input('Informe o código do pedido para adicionar um novo item: '))
@@ -48,24 +55,27 @@ def pedido_adicionar_item():
             pedido.adicionar_item_ao_pedido(novo_item_pedido)
         else:
             print("Não foi possível adicionar este produto, pois o código do produto não existe!")
-        #return Pedido(codido_pedido, endereco_pedido)
+        # return Pedido(codido_pedido, endereco_pedido)
     else:
         print("Pedido inexistente")
         return False
-    
+
+
 def pedido_remover_item():
     int_pedido_selecionado = int(input('Informe o código do pedido para remover um item selecionado: '))
     if buscar_pedido_por_codigo(int_pedido_selecionado):
         # verificar se pedido existe
         pedido = pedidos[int_pedido_selecionado]
-        int_codigo_item = int(input('Informe o número do item para remover deste pedido ' + str(pedido._codigo_pedido) + ': '))
+        int_codigo_item = int(
+            input('Informe o número do item para remover deste pedido ' + str(pedido._codigo_pedido) + ': '))
         # verifica se número intem informado existe: não faz sentido remover item 5 se ele não existe
-        #if pedido.quantidade_itens_pedido() <= int_codigo_item:
+        # if pedido.quantidade_itens_pedido() <= int_codigo_item:
         pedido.remover_item_pedido(int_codigo_item)
     else:
         print("Pedido inexistente")
         return False
-    
+
+
 def pedido_listar_items():
     int_pedido_selecionado = int(input('Informe o código do pedido para mais detalhes: '))
     if buscar_pedido_por_codigo(int_pedido_selecionado):
@@ -75,7 +85,8 @@ def pedido_listar_items():
     else:
         print("Pedido inexistente")
         return False
-    
+
+
 def cadastrar_endereco():
     str_cep = str(input('Informe o cep do endereço: '))
     str_rua = str(input('Informe a rua: '))
@@ -87,6 +98,7 @@ def cadastrar_endereco():
                         str_complemento, str_bairro, str_cidade)
     return endereco
 
+
 def cadastrar_produto():
     int_codigo = int(input('Informe o código identificador do produto: '))
     str_nome = str(input('Qual o nome/descrição do produto? '))
@@ -95,11 +107,13 @@ def cadastrar_produto():
     date_validade = datetime.strptime(date_validade, '%d/%m/%Y')
     return Produto(int_codigo, str_nome, flt_preco, date_validade)
 
+
 def remover_produto():
     int_codigo_remocao = int(input('Informe o código do produto para remoção: '))
     produto_remover = estoque_produtos[int_codigo_remocao]
-    print("Produto (" + produto_remover._descricao + ") removido!") 
+    print("Produto (" + produto_remover._descricao + ") removido!")
     del estoque_produtos[int_codigo_remocao]
+
 
 def buscar_produto_por_codigo(int_codigo_produto):
     # Verifica se existe produto cadastrado
@@ -108,6 +122,7 @@ def buscar_produto_por_codigo(int_codigo_produto):
             return estoque_produtos[int_codigo_produto]
     return False
 
+
 def buscar_pedido_por_codigo(int_codigo_pedido):
     # Verifica se existe produto cadastrado
     for chave in pedidos.keys():
@@ -115,10 +130,29 @@ def buscar_pedido_por_codigo(int_codigo_pedido):
             return pedidos[int_codigo_pedido]
     return False
 
+
+def cadastrar_cliente():
+    cliente_nome = str(input('insira o nome do cliente a cadastrar'))
+    cliente_telefone = str(input('insira o telefone do cliente a cadastrar'))
+    cliente_idade = str(input('insira a idade do cliente a cadastrar'))
+    cliente_genero = str(input('insira o genero do cliente a cadastrar M ou F ou NB'))
+    cliente_endereco = cadastrar_endereco()
+    return Pessoa(cliente_nome, cliente_telefone, cliente_idade, cliente_genero, cliente_endereco)
+
+
+def cadastrar_funcionario():
+    funcionario_nome = str(input('insira o nome do funcionario'))
+    funcionario_telefone = str(input('insira o telefone do funcionario'))
+    funcionario_idade = str(input('insira a idade do funcionario'))
+    funcionario_genero = str(input('insira o genero do funcionario M ou F ou NB'))
+    funcionario_endereco = cadastrar_endereco()
+    return Pessoa(funcionario_nome, funcionario_telefone, funcionario_idade, funcionario_genero, funcionario_endereco)
+
+
 # Aplicação de exemplo disciplina POO - UFRB
 # Sistema de controle de pedidos
 # Professor Guilherme Braga Araújo
-
+lista_funcionarios={}
 estoque_produtos = {}
 pedidos = {}
 
@@ -132,6 +166,9 @@ while True:
     # opc 1
     elif (opcao_escolhida == "1"):
         while True:
+
+            #implementar: visualizador de pedidos e nova opção de selecionar pedidos em aberto(?)
+
             opcao_escolhida = menu_pedido()
             # opc menu vendas - novo pedido
             if (opcao_escolhida == "1"):
@@ -146,12 +183,12 @@ while True:
                 pedido_remover_item()
             elif (opcao_escolhida == "4"):
                 pedido_listar_items()
-            #elif (opcao_escolhida == "5"):
-                #pedido_finalizar()
+            # elif (opcao_escolhida == "5"):
+            # pedido_finalizar()
             else:
                 # Volta para o menu principal
                 break
-               
+
     # opc 2
     elif (opcao_escolhida == "2"):
         produto = cadastrar_produto()
