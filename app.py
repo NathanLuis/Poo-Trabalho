@@ -3,7 +3,7 @@ from class_item_pedido import ItemPedido
 from class_pedido import Pedido
 from class_pessoa import Pessoa
 from class_produto import Produto
-from class_Nota import Nota
+from class_nota import nota
 
 from datetime import datetime
 
