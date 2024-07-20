@@ -60,14 +60,14 @@ def calcular_valor_total(self):
         return valor_total
 
 
-    def toString(self):
-        info_nota = "NOTA FISCAL"
-        info_nota += f"Pedido: {self._pedido._codigo_pedido}\n"
-        info_nota += f"Cliente: {self._cliente._nome}\n"
-        info_nota += f"Atendente: {self._atendente._nome}\n"
-        info_nota += f"Data/Hora: {self._horaGerada}\n"
-        info_nota += f"Valor Total: R$ {self._valorTotal:.2f}\n"
-        info_nota = "FIM DA NOTA FISCAL" 
-        return info_nota
+    # def toString(self):
+      #  info_nota = "NOTA FISCAL"
+      #  info_nota += f"Pedido: {self._pedido._codigo_pedido}\n"
+      #  info_nota += f"Cliente: {self._cliente._nome}\n"
+      #  info_nota += f"Atendente: {self._atendente._nome}\n"
+      #  info_nota += f"Data/Hora: {self._horaGerada}\n"
+      #  info_nota += f"Valor Total: R$ {self._valorTotal:.2f}\n"
+      #  info_nota = "FIM DA NOTA FISCAL" 
+      #  return info_nota
 
 # Observar a funcinalidade da função calcular valor total e o toSting se está implementao corretamente
