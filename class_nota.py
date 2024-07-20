@@ -1,7 +1,7 @@
 import datetime
 
 
-class Nota:
+class nota:
 
     def __init__(self, pedido, cliente, atendente, ):
         self.__pedido = pedido
@@ -17,7 +17,7 @@ class Nota:
     def _pedido(self):
         return self.__pedido
 
-    @_codigoDoPedido.setter
+    @_pedido.setter
     def _pedido(self, value):
         self.__pedido = value
 
