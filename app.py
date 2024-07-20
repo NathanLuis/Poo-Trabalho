@@ -207,7 +207,7 @@ while True:
                 pedido_listar_items()
             elif (opcao_escolhida == "5"):
                 finalizar_pedido()
-            elif (opcao_escolhida == "6")
+            elif (opcao_escolhida == "6"):
                 exibe_notas()
             else:
                 # Volta para o menu principal
