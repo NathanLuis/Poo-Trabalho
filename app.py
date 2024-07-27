@@ -67,9 +67,15 @@ def finalizar_pedido():
     print('Pedido finalizado com sucesso! \n Agora insira os dados do cliente e funcionário.')
     cliente_atual = cadastrar_cliente()
     funcionario_atual = cadastrar_funcionario()
+<<<<<<< HEAD
     nota_atual = Nota(pedido_atual, cliente_atual, funcionario_atual)
     print('Nota gerada com sucesso! \n' + nota_atual.toString())
-    historico_notas.append(nota_atual)
+=======
+    nota_atual = nota(pedido_atual, cliente_atual, funcionario_atual)
+    print('Nota gerada com sucesso! \n' + nota_atual)
+>>>>>>> 05d55b9d94cc40f9ad29ef10b0d89606c7ee0285
+    nota_atual = Nota(pedido_atual, cliente_atual, funcionario_atual)
+    print('Nota gerada com sucesso! \n' + nota_atual.toString())
 
 
 def pedido_adicionar_item():
