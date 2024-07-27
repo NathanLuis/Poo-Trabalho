@@ -1,9 +1,11 @@
+from pyarrow import null
+
 from class_endereco import Endereco
 from class_item_pedido import ItemPedido
 from class_pedido import Pedido
 from class_pessoa import Pessoa
 from class_produto import Produto
-from class_nota import nota
+from class_nota import Nota
 
 from datetime import datetime
 
@@ -28,9 +30,17 @@ def menu_pedido():
         [3] - Remover item do pedido
         [4] - Listar itens do pedido em detalhes
         [5] - Finalizar pedido e imprimir
+        [6] - Exibir histórico de notas fiscais
         [s] - Sair
     ''')
     return str(input('Escolha uma opção: '))
+
+def exibe_notas():
+    count = 1
+    for iterado in historico_notas:
+        print('Nota Nº ' + str(count))
+        print(iterado.toString())
+        count += 1
 
 
 def pedido_adicionar():
@@ -41,8 +51,8 @@ def pedido_adicionar():
     return Pedido(codido_pedido, endereco_pedido)
 def exibe_pedidos_em_aberto():
     count = 1
-    for iterado in pedidos:
-        if iterado.status == 0:
+    for iterado in pedidos.values():
+        if iterado._status == 0:
             print('Aberto Nº ' + str(count))
             print(iterado.toString())
             count += 1
@@ -58,12 +68,10 @@ def finalizar_pedido():
     cliente_atual = cadastrar_cliente()
     funcionario_atual = cadastrar_funcionario()
     nota_atual = Nota(pedido_atual, cliente_atual, funcionario_atual)
-    print('Nota gerada com sucesso! \n' + nota_atual)
+    print('Nota gerada com sucesso! \n' + nota_atual.toString())
     historico_notas.append(nota_atual)
 
-#def gera_nota_fiscal():
 
-#def exibe_notas():
 def pedido_adicionar_item():
     int_pedido_selecionado = int(input('Informe o código do pedido para adicionar um novo item: '))
     if buscar_pedido_por_codigo(int_pedido_selecionado):
@@ -158,8 +166,8 @@ def cadastrar_cliente():
     cliente_telefone = str(input('insira o telefone do cliente a cadastrar'))
     cliente_idade = str(input('insira a idade do cliente a cadastrar'))
     cliente_genero = str(input('insira o genero do cliente a cadastrar M ou F ou NB'))
-    cliente_endereco = cadastrar_endereco()
-    return Pessoa(cliente_nome, cliente_telefone, cliente_idade, cliente_genero, cliente_endereco)
+   # cliente_endereco = cadastrar_endereco()
+    return Pessoa(cliente_nome, cliente_telefone, cliente_idade, cliente_genero, null)
 
 
 def cadastrar_funcionario():
@@ -167,8 +175,8 @@ def cadastrar_funcionario():
     funcionario_telefone = str(input('insira o telefone do funcionario'))
     funcionario_idade = str(input('insira a idade do funcionario'))
     funcionario_genero = str(input('insira o genero do funcionario M ou F ou NB'))
-    funcionario_endereco = cadastrar_endereco()
-    return Pessoa(funcionario_nome, funcionario_telefone, funcionario_idade, funcionario_genero, funcionario_endereco)
+    #funcionario_endereco = cadastrar_endereco()
+    return Pessoa(funcionario_nome, funcionario_telefone, funcionario_idade, funcionario_genero, null)
 
 
 # Aplicação de exemplo disciplina POO - UFRB
