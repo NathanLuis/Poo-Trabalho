@@ -1,5 +1,4 @@
 from pyarrow import null
-
 from class_endereco import Endereco
 from class_item_pedido import ItemPedido
 from class_pedido import Pedido
@@ -38,7 +37,7 @@ def menu_pedido():
 def exibe_notas():
     count = 1
     for iterado in historico_notas:
-        print('Nota Nº ' + str(count))
+        print('\nNota Nº ' + str(count))
         print(iterado.toString())
         count += 1
 
@@ -60,11 +59,11 @@ def exibe_pedidos_em_aberto():
 
 def finalizar_pedido():
     exibe_pedidos_em_aberto();
-    selecao = int(input('Insira o CODIGO do Pedido a finalizar \n O pedido que está prestes a finalizar não poderá ser modificado.'))
+    selecao = int(input('O pedido que está prestes a finalizar não poderá ser modificado! Insira o CODIGO do Pedido a finalizar: '))
 
     pedido_atual = buscar_pedido_por_codigo(selecao)
     pedido_atual.status = 1
-    print('Pedido finalizado com sucesso! \n Agora insira os dados do cliente e funcionário.')
+    print('Pedido finalizado com sucesso! \nAgora insira os dados do cliente e funcionário. \n')
     cliente_atual = cadastrar_cliente()
     funcionario_atual = cadastrar_funcionario()
     nota_atual = Nota(pedido_atual, cliente_atual, funcionario_atual)
@@ -81,7 +80,7 @@ def pedido_adicionar_item():
         int_codigo_produto = int(input('Informe o código do produto para adicionar ao pedido: '))
         produto = buscar_produto_por_codigo(int_codigo_produto)
         if produto:
-            int_quantidade_item = int(input('Informe a quantidade do item:'))
+            int_quantidade_item = int(input('Informe a quantidade do item: '))
             novo_item_pedido = ItemPedido(produto, int_quantidade_item)
             pedido.adicionar_item_ao_pedido(novo_item_pedido)
         else:
@@ -163,19 +162,19 @@ def buscar_pedido_por_codigo(int_codigo_pedido):
 
 
 def cadastrar_cliente():
-    cliente_nome = str(input('insira o nome do cliente a cadastrar'))
-    cliente_telefone = str(input('insira o telefone do cliente a cadastrar'))
-    cliente_idade = str(input('insira a idade do cliente a cadastrar'))
-    cliente_genero = str(input('insira o genero do cliente a cadastrar M ou F ou NB'))
+    cliente_nome = str(input('\ninsira o nome do cliente a cadastrar: '))
+    cliente_telefone = str(input('insira o telefone do cliente a cadastrar: '))
+    cliente_idade = str(input('insira a idade do cliente a cadastrar: '))
+    cliente_genero = str(input('insira o genero do cliente a cadastrar (M ou F ou NB): '))
    # cliente_endereco = cadastrar_endereco()
     return Pessoa(cliente_nome, cliente_telefone, cliente_idade, cliente_genero, null)
 
 
 def cadastrar_funcionario():
-    funcionario_nome = str(input('insira o nome do funcionario'))
-    funcionario_telefone = str(input('insira o telefone do funcionario'))
-    funcionario_idade = str(input('insira a idade do funcionario'))
-    funcionario_genero = str(input('insira o genero do funcionario M ou F ou NB'))
+    funcionario_nome = str(input('\ninsira o nome do funcionario: '))
+    funcionario_telefone = str(input('insira o telefone do funcionario: '))
+    funcionario_idade = str(input('insira a idade do funcionario: '))
+    funcionario_genero = str(input('insira o genero do funcionario (M ou F ou NB): '))
     #funcionario_endereco = cadastrar_endereco()
     return Pessoa(funcionario_nome, funcionario_telefone, funcionario_idade, funcionario_genero, null)
 
@@ -183,7 +182,7 @@ def cadastrar_funcionario():
 # Aplicação de exemplo disciplina POO - UFRB
 # Sistema de controle de pedidos
 # Professor Guilherme Braga Araújo
-historico_notas =[]
+historico_notas = []
 estoque_produtos = {}
 pedidos = {}
 

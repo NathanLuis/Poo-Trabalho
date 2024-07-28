@@ -64,7 +64,7 @@ class Nota:
 
 
     def toString(self):
-        info_nota = "INFO - NOTA FISCAL\n"
+        info_nota = "\n --- INFO - NOTA FISCAL ---\n"
         info_nota += f"Pedido: {self._pedido._codigo_pedido}\n"
         info_nota += f"Cliente: {self._cliente._nome}\n"
         info_nota += f"Atendente: {self._atendente._nome}\n"
