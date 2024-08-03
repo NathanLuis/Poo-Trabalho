@@ -1,0 +1,33 @@
+class Produto:
+    def __init__(self, codigo, nome, preco, validade):
+        self.nome = nome
+        self.preco = preco
+        self.codigo = codigo
+        self.validade = validade
+
+estoque = []
+
+with open("txt_frutas.txt", "r") as arquivo:
+    for linha in arquivo:
+        print(linha)
+        linha_sep = linha.split(";")
+        print(linha_sep)
+        # codigo
+        print(linha_sep[0])
+        # nome
+        print(linha_sep[1])
+        #preco
+        print(linha_sep[2])
+        #validade
+        print(linha_sep(3))
+        # adicionar ao estoque
+        Produto = Produto(linha_sep[0], linha_sep[3])
+        estoque.append(Produto)
+
+print("\n\n----")
+print(estoque)
+for f in estoque:
+    print(f.codigo)
+    print(f.nome)
+    print(f.preco)
+    print(f.validade)
