@@ -1,15 +1,17 @@
 from pyarrow import null
+#importando classes
 from class_endereco import Endereco
 from class_item_pedido import ItemPedido
 from class_pedido import Pedido
 from class_pessoa import Pessoa
 from class_produto import Produto
 from class_nota import Nota
-
+#importando biblioteca datetime para trabalhar com strings que representam datas
 from datetime import datetime
 
-
+#Criação do Menu Principal que dá ao usuário o controle sobre o código faz através de um sistema de if e elses
 def menu_principal():  # MENU PRINCIPAL
+    #Escreve o menu principal na tela para que o ususário possa ver e interagir
     print('''
         MENU Principal:
         [1] - Controle de vendas
@@ -18,10 +20,11 @@ def menu_principal():  # MENU PRINCIPAL
         [4] - Pesquisar um produto
         [s] - Sair
     ''')
+    #esse return faz com que a saída dessa função quando chamada seja a resposta dada pelo usuário
     return str(input('Escolha uma opção: '))
 
-
-def menu_pedido():
+#Primeiro submenu, menu que controla o que fazer com pedidos. Esse menu reutiliza o mecanismo do anterior, um print para mostrar o menu na tela e um return usando as funções str e input para receber uma informação do usuário e usar ela como saída da função
+def menu_pedido(): # MENU PEDIDOS
     print('''
         MENU Vendas:
         [1] - Abrir novo pedido
@@ -34,6 +37,7 @@ def menu_pedido():
     ''')
     return str(input('Escolha uma opção: '))
 
+#função que 
 def exibe_notas():
     count = 1
     for iterado in historico_notas:
