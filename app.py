@@ -9,7 +9,9 @@ from class_nota import Nota
 #importando biblioteca datetime para trabalhar com strings que representam datas
 from datetime import datetime
 
-#Criação do Menu Principal que dá ao usuário o controle sobre o código faz através de um sistema de if e elses
+#PARTE 1: Criando Funções
+
+#Função Menu Principal: Quando chamada, dá ao usuário o controle sobre o código faz através de um sistema de if e elses
 def menu_principal():  # MENU PRINCIPAL
     #Escreve o menu principal na tela para que o ususário possa ver e interagir
     print('''
@@ -23,7 +25,7 @@ def menu_principal():  # MENU PRINCIPAL
     #esse return faz com que a saída dessa função quando chamada seja a resposta dada pelo usuário
     return str(input('Escolha uma opção: '))
 
-#Primeiro submenu, menu que controla o que fazer com pedidos. Esse menu reutiliza o mecanismo do anterior, um print para mostrar o menu na tela e um return usando as funções str e input para receber uma informação do usuário e usar ela como saída da função
+#Função Menu Pedidos: Apresenta menu que controla o que fazer com pedidos. Esse menu reutiliza o mecanismo do anterior, um print para mostrar o menu na tela e um return usando as funções str e input para receber uma informação do usuário e usar ela como saída da função
 def menu_pedido(): # MENU PEDIDOS
     print('''
         MENU Vendas:
@@ -37,52 +39,62 @@ def menu_pedido(): # MENU PEDIDOS
     ''')
     return str(input('Escolha uma opção: '))
 
-#função que 
+#Função Exibir Notas: Vai mostrar na tela todas as notas fiscais geradas pelo programa até o momento
 def exibe_notas():
     count = 1
+    #usando um for para exibir todas as posições de um vetor onde as notas são armazeadas em ordem
     for iterado in historico_notas:
         print('\nNota Nº ' + str(count))
         print(iterado.toString())
         count += 1
 
-
+#Função Adicionar Pedidos: Essa função vai criar e cadastrar novos pedidos
 def pedido_adicionar():
     # código pedido gerado automaticamente
     endereco_pedido = cadastrar_endereco()
-    # a numeração do pedido começa de 1 até n
+    # usa as funções int() e len() para calcular o tamanho da lista de pedidos e depois soma 1 a ela, esse valor se torna o código do pedido, quando ele for adicionado a lista, seu código será também seu index a numeração do pedido começa de 1 até n
     codido_pedido = int(len(pedidos)) + 1
+    #Atráves desse return o código cria um objeto do tipo pedido
     return Pedido(codido_pedido, endereco_pedido)
+
+#Função Exibir Pedidos Em Aberto: Mostra todos os pedidos cujo status não foi alterado para encerrado ainda
 def exibe_pedidos_em_aberto():
     count = 1
+    #usa um for e um if para verificar quais pedidos da lista "pedidos" tem seu status aberto ou não e exibe na tela apenas ps pedidos cujo status não foi alterado
     for iterado in pedidos.values():
         if iterado._status == 0:
             print('Aberto Nº ' + str(count))
             print(iterado.toString())
             count += 1
 
-
+#Função Finalizar Pedido: Resumidamente, altera o status de um pedido para fechado e gera sua nota fiscal
 def finalizar_pedido():
+    #chama a função exibir pedidos em aberto para que o usuário possa ver que pedidos ainda não foram finalizados
     exibe_pedidos_em_aberto();
+    #armazena o código do pedido numa variável "selecao"
     selecao = int(input('O pedido que está prestes a finalizar não poderá ser modificado! Insira o CODIGO do Pedido a finalizar: '))
-
+    #muda o statsus do pedido cujo código é "selecao" para fechado, alterando o atributo status de 0 para 1
     pedido_atual = buscar_pedido_por_codigo(selecao)
     pedido_atual.status = 1
     print('Pedido finalizado com sucesso! \nAgora insira os dados do cliente e funcionário. \n')
     cliente_atual = cadastrar_cliente()
     funcionario_atual = cadastrar_funcionario()
+    #cria um objeto do tipo nota e armazena ele numa varíavel "nota_atual"
     nota_atual = Nota(pedido_atual, cliente_atual, funcionario_atual)
     print('Nota gerada com sucesso! \n' + nota_atual.toString())
-
+    #adciona a nota armazenada na variável "nota_atual" a lista "historico_notas"
     historico_notas.append(nota_atual)
 
-
+#função Adicionar Item Ao Pedido: Vai criar um objeto do tipo item do pedido (classe complexa) e adicionar ele a um vetor contendo todos os itens do pedido
 def pedido_adicionar_item():
     int_pedido_selecionado = int(input('Informe o código do pedido para adicionar um novo item: '))
+    #verifica se pedido existe usando ifs para validar o pedido baseado no seu código
     if buscar_pedido_por_codigo(int_pedido_selecionado):
-        # verificar se pedido existe
         pedido = pedidos[int_pedido_selecionado]
         int_codigo_produto = int(input('Informe o código do produto para adicionar ao pedido: '))
+        #Usa o método buscar produdo por código para procurar se existe um objeto do tipo produto com o código pedido, o retorno dessa função é do tipo boleano
         produto = buscar_produto_por_codigo(int_codigo_produto)
+        #esse if só roda se o produto existir, finalmente criando um item do pedido
         if produto:
             int_quantidade_item = int(input('Informe a quantidade do item: '))
             novo_item_pedido = ItemPedido(produto, int_quantidade_item)
@@ -94,14 +106,13 @@ def pedido_adicionar_item():
         print("Pedido inexistente")
         return False
 
-
+#Função Remover Item do Pedido: Essa função apaga um objeto do tipo item do pedido da lista que armazena os itens de um determinado pedido
 def pedido_remover_item():
     int_pedido_selecionado = int(input('Informe o código do pedido para remover um item selecionado: '))
+    #verifica se pedido existe
     if buscar_pedido_por_codigo(int_pedido_selecionado):
-        # verificar se pedido existe
         pedido = pedidos[int_pedido_selecionado]
-        int_codigo_item = int(
-            input('Informe o número do item para remover deste pedido ' + str(pedido._codigo_pedido) + ': '))
+        int_codigo_item = int(input('Informe o número do item para remover deste pedido ' + str(pedido._codigo_pedido) + ': '))
         # verifica se número intem informado existe: não faz sentido remover item 5 se ele não existe
         # if pedido.quantidade_itens_pedido() <= int_codigo_item:
         pedido.remover_item_pedido(int_codigo_item)
@@ -109,18 +120,20 @@ def pedido_remover_item():
         print("Pedido inexistente")
         return False
 
-
+#função Listar Itens do Pedido: Exibe na tela todos os elementos da lista de itens de um determinado pedido
 def pedido_listar_items():
     int_pedido_selecionado = int(input('Informe o código do pedido para mais detalhes: '))
+    # verificar se pedido existe
     if buscar_pedido_por_codigo(int_pedido_selecionado):
-        # verificar se pedido existe
+        #busca o pedido específico na lista de pedidos
         pedido = pedidos[int_pedido_selecionado]
+        #a função tostring vai transformar numa string todos os itens do pedido selecionado pelo código e escrever na tela
         pedido.toString()
     else:
         print("Pedido inexistente")
         return False
 
-
+#Função Cadastrar Endereço: pede ao usuário os dados que comporão os atributos de um objeto do tipo endereço e finaliza criando o tal objeto
 def cadastrar_endereco():
     str_cep = str(input('Informe o cep do endereço: '))
     str_rua = str(input('Informe a rua: '))
@@ -132,7 +145,7 @@ def cadastrar_endereco():
                         str_complemento, str_bairro, str_cidade)
     return endereco
 
-
+#Função Cadastrar Produto: pede ao usuário os dados que comporão os atributos de um objeto do tipo produto e finaliza criando o tal obejto
 def cadastrar_produto():
     int_codigo = int(input('Informe o código identificador do produto: '))
     str_nome = str(input('Qual o nome/descrição do produto? '))
@@ -141,14 +154,14 @@ def cadastrar_produto():
     date_validade = datetime.strptime(date_validade, '%d/%m/%Y')
     return Produto(int_codigo, str_nome, flt_preco, date_validade)
 
-
+#Função Remover Produdo: Busca um objeto do tipo produto pelo seu código e o apaga do dicionário estoque de produtos
 def remover_produto():
     int_codigo_remocao = int(input('Informe o código do produto para remoção: '))
     produto_remover = estoque_produtos[int_codigo_remocao]
     print("Produto (" + produto_remover._descricao + ") removido!")
     del estoque_produtos[int_codigo_remocao]
 
-
+#Função Buscar Produto por Código: Informado o código de um produto, pesquisa o produto no dicionário estoque de produtos, isso se aproveita do fato de o código de um produto ser o seu index
 def buscar_produto_por_codigo(int_codigo_produto):
     # Verifica se existe produto cadastrado
     for chave in estoque_produtos.keys():
@@ -156,24 +169,25 @@ def buscar_produto_por_codigo(int_codigo_produto):
             return estoque_produtos[int_codigo_produto]
     return False
 
-
+#Função Buscar Pedido por Código: Informado o código de um pedido, pesquisa o pedido no dicionário pedidos, isso se aproveita do fato de o código de um pedido ser o seu index
 def buscar_pedido_por_codigo(int_codigo_pedido):
-    # Verifica se existe produto cadastrado
+    # Verifica se existe pedido cadastrado
     for chave in pedidos.keys():
         if chave == int_codigo_pedido:
             return pedidos[int_codigo_pedido]
     return False
 
+#Função Cadastrar Cliente: pede ao usuário os dados que comporão os atributos de um objeto do tipo Cliente (que erda do tipo Pessoa) e finaliza criando o tal objeto
 
 def cadastrar_cliente():
     cliente_nome = str(input('\ninsira o nome do cliente a cadastrar: '))
     cliente_telefone = str(input('insira o telefone do cliente a cadastrar: '))
     cliente_idade = str(input('insira a idade do cliente a cadastrar: '))
     cliente_genero = str(input('insira o genero do cliente a cadastrar (M ou F ou NB): '))
-   # cliente_endereco = cadastrar_endereco()
+   #cliente_endereco = cadastrar_endereco()
     return Pessoa(cliente_nome, cliente_telefone, cliente_idade, cliente_genero, null)
 
-
+#Função Cadastrar Funcionário: pede ao usuário os dados que comporão os atributos de um objeto do tipo Funcionário (que erda do tipo Pessoa) e finaliza criando o tal objeto
 def cadastrar_funcionario():
     funcionario_nome = str(input('\ninsira o nome do funcionario: '))
     funcionario_telefone = str(input('insira o telefone do funcionario: '))
@@ -186,6 +200,8 @@ def cadastrar_funcionario():
 # Aplicação de exemplo disciplina POO - UFRB
 # Sistema de controle de pedidos
 # Professor Guilherme Braga Araújo
+
+#Cria uma lista histórico_notas para armazernar as notas e dois dicionários, estoque_produtos e pedidos para adicionar os pedidos
 historico_notas = []
 estoque_produtos = {}
 pedidos = {}
