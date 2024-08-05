@@ -1,3 +1,5 @@
+import os
+
 from pyarrow import null
 #importando classes
 from class_endereco import Endereco
@@ -197,9 +199,41 @@ def cadastrar_funcionario():
     return Pessoa(funcionario_nome, funcionario_telefone, funcionario_idade, funcionario_genero, null)
 
 
+
+def readAndLoad_method(String arquivo, lista[] ):
+    caminho_arquivo = f'{arquivo}_registro.txt'
+    
+    if os.path.exists(caminho_arquivo):
+        try:
+            with open(caminhho_arquivo, 'r') as file:
+                for line in file:
+                    attributes = line.strip().split(',')
+
+                    print(conteudo)
+        except FileNotFoundError:
+            print("Erro: O arquivo não foi encontrado. Crianddo novo registro")
+        except IOError:
+            print("Erro: Não foi possível ler o arquivo.")
+    else:
+        
+
+
+def writeAndSave_method(caminho_do_arquivo, registro, objeto):
+    try:
+        with open (caminho_do_arquivo, 'w') as file:
+            for produto in registro:
+                line = produto.toString()
+                file.write(line + '\n')
+    except IOError:
+        print(f'Erro: Não foi possível escrever no arquivo {caminho_do_arquivo}.')
+
 # Aplicação de exemplo disciplina POO - UFRB
 # Sistema de controle de pedidos
 # Professor Guilherme Braga Araújo
+
+#função de loading a implementar
+
+
 
 #Cria uma lista histórico_notas para armazernar as notas e dois dicionários, estoque_produtos e pedidos para adicionar os pedidos
 historico_notas = []
@@ -212,6 +246,9 @@ while True:
     # verificando escolha
     # opc sair
     if (opcao_escolhida == "s"):
+
+        #função de saving do sistema a implementar
+
         break
     # opc 1
     elif (opcao_escolhida == "1"):

@@ -39,3 +39,7 @@ class Produto:
     @_validade.setter
     def _validade(self, value):
         self.__validade = value
+
+    def toString(self):
+        attributes = [str(value) for key, value in self.__dict__.items() if key.startswith('_Produto__')]
+        return ','.join(attributes)

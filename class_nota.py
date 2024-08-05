@@ -73,4 +73,8 @@ class Nota:
         info_nota += "----------------"
         return info_nota
 
+    def toStringForSaveLoadMethod(self):
+        attributes = [str(value) for key, vaue in self.__dict__.items() if key.startswith('_Nota__')]
+        return ','.join(attributes)
+        
 # Observar a funcinalidade da função calcular valor total e o toSting se está implementao corretamente
