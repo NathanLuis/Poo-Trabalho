@@ -199,40 +199,38 @@ def cadastrar_funcionario():
     return Pessoa(funcionario_nome, funcionario_telefone, funcionario_idade, funcionario_genero, null)
 
 
+def writeAndSave_method(caminho_do_arquivo, registro, objeto):
+    try:
+        with open(caminho_do_arquivo, 'w') as file:
+            for obj in registro:
+                line = obj.toString()
+                file.write(line + '\n')
+    except IOError:
+        print(f"Erro: Não foi possível escrever no arquivo {caminho_do_arquivo}.")
 
-def readAndLoad_method(String arquivo, lista[] ):
+def readAndLoad_method(arquivo, lista, cls):
     caminho_arquivo = f'{arquivo}_registro.txt'
     
     if os.path.exists(caminho_arquivo):
         try:
-            with open(caminhho_arquivo, 'r') as file:
+            with open(caminho_arquivo, 'r') as file:
                 for line in file:
                     attributes = line.strip().split(',')
-
-                    print(conteudo)
+                    obj = cls(*attributes)
+                    lista.append(obj)
         except FileNotFoundError:
-            print("Erro: O arquivo não foi encontrado. Crianddo novo registro")
+            print("Erro: O arquivo não foi encontrado. Criando novo registro")
         except IOError:
             print("Erro: Não foi possível ler o arquivo.")
     else:
-        
+        print(f'O arquivo {caminho_arquivo} não existe.')
 
 
-def writeAndSave_method(caminho_do_arquivo, registro, objeto):
-    try:
-        with open (caminho_do_arquivo, 'w') as file:
-            for produto in registro:
-                line = produto.toString()
-                file.write(line + '\n')
-    except IOError:
-        print(f'Erro: Não foi possível escrever no arquivo {caminho_do_arquivo}.')
+
 
 # Aplicação de exemplo disciplina POO - UFRB
 # Sistema de controle de pedidos
 # Professor Guilherme Braga Araújo
-
-#função de loading a implementar
-
 
 
 #Cria uma lista histórico_notas para armazernar as notas e dois dicionários, estoque_produtos e pedidos para adicionar os pedidos
