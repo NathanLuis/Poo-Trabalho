@@ -22,7 +22,7 @@ def menu_principal():  # MENU PRINCIPAL
         [2] - Cadastrar novo produto
         [3] - Remover um produto
         [4] - Pesquisar um produto
-        [s] - Sair
+        [s] - Salvar e Sair
     ''')
     #esse return faz com que a saída dessa função quando chamada seja a resposta dada pelo usuário
     return str(input('Escolha uma opção: '))
@@ -199,32 +199,42 @@ def cadastrar_funcionario():
     return Pessoa(funcionario_nome, funcionario_telefone, funcionario_idade, funcionario_genero, null)
 
 
-def writeAndSave_method(caminho_do_arquivo, registro, objeto):
-    try:
-        with open(caminho_do_arquivo, 'w') as file:
-            for obj in registro:
-                line = obj.toString()
-                file.write(line + '\n')
-    except IOError:
-        print(f"Erro: Não foi possível escrever no arquivo {caminho_do_arquivo}.")
 
-def readAndLoad_method(arquivo, lista, cls):
-    caminho_arquivo = f'{arquivo}_registro.txt'
+def writeAndCleanSave_method(arquivo, registro):
+    caminho_arquivo = os.path.join(os.getcwd(), f'{arquivo}_registro.txt')
+    try:
+        with open(caminho_arquivo, 'w') as file:
+            if registro:
+                for obj in registro:
+                        line = obj.toStringForSaveLoadMethod()
+                        file.write(line + '\n')
+            else:
+                print("{registro} vazio, não há nada para salvar")
+    except IOError:
+        print(f"Erro: Não foi possível escrever no arquivo {arquivo}.")
+
+
+def readAndLoad_method(arquivo, registro, cls):
+    caminho_arquivo = os.path.join(os.getcwd(), f'{arquivo}_registro.txt')
     
     if os.path.exists(caminho_arquivo):
         try:
             with open(caminho_arquivo, 'r') as file:
                 for line in file:
-                    attributes = line.strip().split(',')
-                    obj = cls(*attributes)
-                    lista.append(obj)
+                    obj = cls.fromStringToSaveLoadMethod(line.strip())
+                    if isinstance(registro, list):
+                        registro.append(obj)
+                    elif isinstance(registro, dict):
+                        # Assuming obj has an attribute 'id' or similar to use as a key
+                        registro[obj._codigo_produto] = obj
+                    else:
+                        print(f"Unsupported container type: {type(registro)}")
         except FileNotFoundError:
-            print("Erro: O arquivo não foi encontrado. Criando novo registro")
+            print("Não foram detectados registros anteriores. Iniciando novo registro.")
         except IOError:
             print("Erro: Não foi possível ler o arquivo.")
     else:
-        print(f'O arquivo {caminho_arquivo} não existe.')
-
+        print(f'O arquivo {caminho_arquivo} não existe. Iniciando novo registro.')
 
 
 
@@ -237,6 +247,8 @@ def readAndLoad_method(arquivo, lista, cls):
 historico_notas = []
 estoque_produtos = {}
 pedidos = {}
+readAndLoad_method('notas', historico_notas, Nota)
+readAndLoad_method('produtos', estoque_produtos, Produto)
 
 while True:
     # menu_principal
@@ -244,7 +256,8 @@ while True:
     # verificando escolha
     # opc sair
     if (opcao_escolhida == "s"):
-
+        writeAndCleanSave_method('notas', historico_notas)
+        writeAndCleanSave_method('produtos', estoque_produtos)
         #função de saving do sistema a implementar
 
         break

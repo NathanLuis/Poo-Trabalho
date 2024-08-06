@@ -6,6 +6,14 @@ class Nota:
     from datetime import datetime
 
 class Nota:
+    def __init__construtorDoRegistro(self, pedido, cliente, atendente,horaGerada,valorTotal):
+        self.__pedido = pedido
+        self.__cliente = cliente
+        self.__atendente = atendente
+        self.horaGerada = horaGerada
+        self.valorTotal = valorTotal
+
+
     def __init__(self, pedido, cliente, atendente):
         self.__pedido = pedido
         self.__cliente = cliente
@@ -74,7 +82,13 @@ class Nota:
         return info_nota
 
     def toStringForSaveLoadMethod(self):
-        attributes = [str(value) for key, vaue in self.__dict__.items() if key.startswith('_Nota__')]
-        return ','.join(attributes)
-        
+        return f'{self._pedido._codigo_pedido},{self._cliente._nome},{self._atendente._nome},{self._horaGerada},{self._valorTotal}'
+
+    def fromStringToSaveLoadMethod(String):
+        attributes = String.strip().split(',')        
+        if len(attributes) ==5:
+            return Nota(*attributes)
+        else:
+            print(f"Erro: Linha malformada encontrada: {String.strip()}")
+            return None
 # Observar a funcinalidade da função calcular valor total e o toSting se está implementao corretamente

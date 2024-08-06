@@ -40,6 +40,17 @@ class Produto:
     def _validade(self, value):
         self.__validade = value
 
-    def toString(self):
-        attributes = [str(value) for key, value in self.__dict__.items() if key.startswith('_Produto__')]
-        return ','.join(attributes)
+    def toStringForSaveLoadMethod(self):
+        return str(f'{self.__codigo_produto},{self.__descricao},{self.__preco},{self.__validade}')
+    
+    def fromStringToSaveLoadMethod(String):
+        attributes = String.strip().split(',')
+        if len(attributes) == 4:
+            codigo_produto = attributes[0]
+            descricao = attributes[1]
+            preco = float(attributes[2])
+            validade = attributes[3]
+            return Produto(codigo_produto,descricao,preco,validade)
+        else:
+            print(f"Erro: Linha malformada encontrada: {String.strip()}")
+            return None
