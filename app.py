@@ -159,16 +159,18 @@ def cadastrar_produto():
 #Função Remover Produdo: Busca um objeto do tipo produto pelo seu código e o apaga do dicionário estoque de produtos
 def remover_produto():
     int_codigo_remocao = int(input('Informe o código do produto para remoção: '))
-    produto_remover = estoque_produtos[int_codigo_remocao]
+    for produto in estoque_produtos:
+        if produto._codigo_produto == int_codigo_remocao:
+            produto_remover =produto
     print("Produto (" + produto_remover._descricao + ") removido!")
     del estoque_produtos[int_codigo_remocao]
 
 #Função Buscar Produto por Código: Informado o código de um produto, pesquisa o produto no dicionário estoque de produtos, isso se aproveita do fato de o código de um produto ser o seu index
 def buscar_produto_por_codigo(int_codigo_produto):
     # Verifica se existe produto cadastrado
-    for chave in estoque_produtos.keys():
-        if chave == int_codigo_produto:
-            return estoque_produtos[int_codigo_produto]
+    for obj in estoque_produtos:
+        if obj._codigo_produto == int_codigo_produto:
+            return obj
     return False
 
 #Função Buscar Pedido por Código: Informado o código de um pedido, pesquisa o pedido no dicionário pedidos, isso se aproveita do fato de o código de um pedido ser o seu index
@@ -206,8 +208,9 @@ def writeAndCleanSave_method(arquivo, registro):
         with open(caminho_arquivo, 'w') as file:
             if registro:
                 for obj in registro:
-                        line = obj.toStringForSaveLoadMethod()
-                        file.write(line + '\n')
+                        if obj:
+                            line = obj.toStringForSaveLoadMethod()
+                            file.write(line + '\n')
             else:
                 print("{registro} vazio, não há nada para salvar")
     except IOError:
@@ -216,19 +219,13 @@ def writeAndCleanSave_method(arquivo, registro):
 
 def readAndLoad_method(arquivo, registro, cls):
     caminho_arquivo = os.path.join(os.getcwd(), f'{arquivo}_registro.txt')
-    
     if os.path.exists(caminho_arquivo):
         try:
             with open(caminho_arquivo, 'r') as file:
                 for line in file:
                     obj = cls.fromStringToSaveLoadMethod(line.strip())
-                    if isinstance(registro, list):
+                    if obj:
                         registro.append(obj)
-                    elif isinstance(registro, dict):
-                        # Assuming obj has an attribute 'id' or similar to use as a key
-                        registro[obj._codigo_produto] = obj
-                    else:
-                        print(f"Unsupported container type: {type(registro)}")
         except FileNotFoundError:
             print("Não foram detectados registros anteriores. Iniciando novo registro.")
         except IOError:
@@ -245,7 +242,7 @@ def readAndLoad_method(arquivo, registro, cls):
 
 #Cria uma lista histórico_notas para armazernar as notas e dois dicionários, estoque_produtos e pedidos para adicionar os pedidos
 historico_notas = []
-estoque_produtos = {}
+estoque_produtos = []
 pedidos = {}
 readAndLoad_method('notas', historico_notas, Nota)
 readAndLoad_method('produtos', estoque_produtos, Produto)
@@ -256,6 +253,10 @@ while True:
     # verificando escolha
     # opc sair
     if (opcao_escolhida == "s"):
+        for obj in historico_notas:
+            print(obj.toString())
+        for obj in estoque_produtos:
+            print(obj.toStringForSaveLoadMethod())
         writeAndCleanSave_method('notas', historico_notas)
         writeAndCleanSave_method('produtos', estoque_produtos)
         #função de saving do sistema a implementar
@@ -273,7 +274,7 @@ while True:
                 pedido = pedido_adicionar()
                 if (pedido):
                     # adiciona pedido ao sistema
-                    pedidos[pedido._codigo_pedido] = pedido
+                    pedidos[pedido._codigo_pedido]=pedido
             # opc menu vendas - adicionar item    
             elif (opcao_escolhida == "2"):
                 pedido_adicionar_item()
@@ -294,13 +295,13 @@ while True:
         produto = cadastrar_produto()
         if (produto):
             # adiciona produto ao nosso estoque
-            estoque_produtos[produto._codigo_produto] = produto
+            estoque_produtos.append(produto)
     # opc 3
     elif (opcao_escolhida == "3"):
         remover_produto()
     # opc 4
     elif (opcao_escolhida == "4"):
-        int_codigo_produto = int(input('Informe o código do produto para busca: '))
+        int_codigo_produto = input('Informe o código do produto para busca: ')
         produto_pesquisa = buscar_produto_por_codigo(int_codigo_produto)
         if (produto_pesquisa):
             print("Produto encontrado:")

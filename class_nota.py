@@ -6,12 +6,12 @@ class Nota:
     from datetime import datetime
 
 class Nota:
-    def __init__construtorDoRegistro(self, pedido, cliente, atendente,horaGerada,valorTotal):
-        self.__pedido = pedido
-        self.__cliente = cliente
-        self.__atendente = atendente
-        self.horaGerada = horaGerada
-        self.valorTotal = valorTotal
+    def __init__construtorDoRegistro(self, codigo_pedido, cliente, atendente,horaGerada,valorTotal):
+        self._codigo_pedido = codigo_pedido
+        self._cliente = cliente
+        self._atendente = atendente
+        self._horaGerada = horaGerada
+        self._valorTotal = valorTotal
 
 
     def __init__(self, pedido, cliente, atendente):
@@ -66,7 +66,7 @@ class Nota:
 
     def calcular_valor_total(self):
         valor_total = 0.0
-        for item in self._pedido._itens_pedidos:
+        for item in self.__pedido._itens_pedidos:
             valor_total += item._produto._preco * item._quantidade
         return valor_total
 
@@ -84,11 +84,21 @@ class Nota:
     def toStringForSaveLoadMethod(self):
         return f'{self._pedido._codigo_pedido},{self._cliente._nome},{self._atendente._nome},{self._horaGerada},{self._valorTotal}'
 
+
     def fromStringToSaveLoadMethod(String):
-        attributes = String.strip().split(',')        
-        if len(attributes) ==5:
-            return Nota(*attributes)
-        else:
-            print(f"Erro: Linha malformada encontrada: {String.strip()}")
-            return None
+        try:
+            attributes = String.strip().split(',')        
+            if len(attributes) ==5:
+                codigo_pedido = attributes[0]
+                cliente = attributes[1]
+                atendente = attributes[2]
+                horaGerada = attributes[3]
+                valorTotal = attributes[4]
+                return Nota.__init__construtorDoRegistro(codigo_pedido, cliente, atendente, horaGerada,valorTotal)
+            else:
+                print(f"Erro na leitura do arquivo {String.strip()}")
+                return None
+        except Exception as e:
+            print(f'Erro na leitura do arquivo {String.strip()}')
+            print(f'Erro: {e}')
 # Observar a funcinalidade da função calcular valor total e o toSting se está implementao corretamente
