@@ -42,10 +42,20 @@ class Pedido:
         self.__itens_pedidos = value
 
     def adicionar_item_ao_pedido(self, itempedido):
-        self.__itens_pedidos.append(itempedido)
+        item_found = False
+        for item in self.__itens_pedidos:
+            if item._produto._codigo_produto == itempedido._produto._codigo_produto:
+                item._quantidade += itempedido._quantidade
+                item._preco_item = item._produto._preco * item._quantidade
+                item_found = True
+                print("Pedido atualizado com sucesso!")
+                break  # Exit the loop once the item is found and updated
+        if not item_found:
+            self.__itens_pedidos.append(itempedido)
+            print("Item adicionado ao pedido com sucesso!")
 
-    def remover_item_pedido(self, codigo_item):
-        self.__itens_pedidos.pop(codigo_item)
+    def remover_item_pedido(self, itempedido):
+        self.__itens_pedidos.pop(itempedido)
 
     def quantidade_itens_pedido(self):
         return int(len(self.__itens_pedidos))

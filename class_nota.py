@@ -89,11 +89,11 @@ class Nota:
         try:
             attributes = String.strip().split(',')        
             if len(attributes) ==5:
-                codigo_pedido = attributes[0]
+                codigo_pedido = int(attributes[0])
                 cliente = attributes[1]
                 atendente = attributes[2]
                 horaGerada = attributes[3]
-                valorTotal = attributes[4]
+                valorTotal = float(attributes[4])
                 return Nota.__init__construtorDoRegistro(codigo_pedido, cliente, atendente, horaGerada,valorTotal)
             else:
                 print(f"Erro na leitura do arquivo {String.strip()}")

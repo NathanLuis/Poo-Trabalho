@@ -77,7 +77,7 @@ def finalizar_pedido():
     selecao = int(input('O pedido que está prestes a finalizar não poderá ser modificado! Insira o CODIGO do Pedido a finalizar: '))
     #muda o statsus do pedido cujo código é "selecao" para fechado, alterando o atributo status de 0 para 1
     pedido_atual = buscar_pedido_por_codigo(selecao)
-    pedido_atual.status = 1
+    pedido_atual._status = 1
     print('Pedido finalizado com sucesso! \nAgora insira os dados do cliente e funcionário. \n')
     cliente_atual = cadastrar_cliente()
     funcionario_atual = cadastrar_funcionario()
@@ -111,13 +111,21 @@ def pedido_adicionar_item():
 #Função Remover Item do Pedido: Essa função apaga um objeto do tipo item do pedido da lista que armazena os itens de um determinado pedido
 def pedido_remover_item():
     int_pedido_selecionado = int(input('Informe o código do pedido para remover um item selecionado: '))
-    #verifica se pedido existe
+    # verifica se pedido existe
     if buscar_pedido_por_codigo(int_pedido_selecionado):
         pedido = pedidos[int_pedido_selecionado]
         int_codigo_item = int(input('Informe o número do item para remover deste pedido ' + str(pedido._codigo_pedido) + ': '))
-        # verifica se número intem informado existe: não faz sentido remover item 5 se ele não existe
-        # if pedido.quantidade_itens_pedido() <= int_codigo_item:
-        pedido.remover_item_pedido(int_codigo_item)
+        # verifica se número item informado existe
+        item_pedido = None
+        for item in pedido._itens_pedidos:
+            if item._produto._codigo_produto == int_codigo_item:
+                item_pedido = pedido._itens_pedidos.index(item)
+                break  # Exit the loop once the item is found
+        if item_pedido:
+            pedido.remover_item_pedido(item_pedido)
+            print("Item removido com sucesso!")
+        else:
+            print("Item não encontrado no pedido.")
     else:
         print("Pedido inexistente")
         return False
@@ -158,12 +166,18 @@ def cadastrar_produto():
 
 #Função Remover Produdo: Busca um objeto do tipo produto pelo seu código e o apaga do dicionário estoque de produtos
 def remover_produto():
-    int_codigo_remocao = int(input('Informe o código do produto para remoção: '))
+    codigo_remocao = int(input('Informe o código do produto para remoção: '))
+    produto_remover = None
     for produto in estoque_produtos:
-        if produto._codigo_produto == int_codigo_remocao:
-            produto_remover =produto
-    print("Produto (" + produto_remover._descricao + ") removido!")
-    del estoque_produtos[int_codigo_remocao]
+        if produto._codigo_produto == codigo_remocao:
+            produto_remover = produto
+            if produto_remover:
+                print("Produto (" + produto_remover._descricao + ") removido!")
+                estoque_produtos.remove(produto_remover)
+        else:
+            print("Produto não encontrado!")
+    
+    
 
 #Função Buscar Produto por Código: Informado o código de um produto, pesquisa o produto no dicionário estoque de produtos, isso se aproveita do fato de o código de um produto ser o seu index
 def buscar_produto_por_codigo(int_codigo_produto):
@@ -294,14 +308,22 @@ while True:
     elif (opcao_escolhida == "2"):
         produto = cadastrar_produto()
         if (produto):
-            # adiciona produto ao nosso estoque
+            for obj in estoque_produtos:
+                if obj._codigo_produto == produto._codigo_produto:
+                    print("Produto já cadastrado!")
+                    break
             estoque_produtos.append(produto)
+            print("Produto cadastrado com sucesso!")
+        else:
+            print("Falha no cadastro do produto!")
+            # adiciona produto ao nosso estoque
+            
     # opc 3
     elif (opcao_escolhida == "3"):
         remover_produto()
     # opc 4
     elif (opcao_escolhida == "4"):
-        int_codigo_produto = input('Informe o código do produto para busca: ')
+        int_codigo_produto = int(input('Informe o código do produto para busca: '))
         produto_pesquisa = buscar_produto_por_codigo(int_codigo_produto)
         if (produto_pesquisa):
             print("Produto encontrado:")

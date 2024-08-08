@@ -43,14 +43,14 @@ class Produto:
     def toStringForSaveLoadMethod(self):
         return str(f'{self.__codigo_produto},{self.__descricao},{self.__preco},{self.__validade}')
     
-    def fromStringToSaveLoadMethod(String):
-        attributes = String.strip().split(',')
+    def fromStringToSaveLoadMethod(string):
+        attributes = string.strip().split(',')
         if len(attributes) == 4:
-            codigo_produto = attributes[0]
-            descricao = attributes[1]
+            codigo_produto = int(attributes[0])
+            descricao = str(attributes[1])
             preco = float(attributes[2])
-            validade = attributes[3]
+            validade = str(attributes[3])
             return Produto(codigo_produto,descricao,preco,validade)
         else:
-            print(f"Erro: Linha malformada encontrada: {String.strip()}")
+            print(f"Erro: Linha malformada encontrada: {string.strip()}")
             return None
