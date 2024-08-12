@@ -52,12 +52,21 @@ def exibe_notas():
 
 #Função Adicionar Pedidos: Essa função vai criar e cadastrar novos pedidos
 def pedido_adicionar():
-    # código pedido gerado automaticamente
-    endereco_pedido = cadastrar_endereco()
-    # usa as funções int() e len() para calcular o tamanho da lista de pedidos e depois soma 1 a ela, esse valor se torna o código do pedido, quando ele for adicionado a lista, seu código será também seu index a numeração do pedido começa de 1 até n
-    codido_pedido = int(len(pedidos)) + 1
-    #Atráves desse return o código cria um objeto do tipo pedido
-    return Pedido(codido_pedido, endereco_pedido)
+    try:
+        # código pedido gerado automaticamente
+        endereco_pedido = cadastrar_endereco()
+        
+        # usa as funções int() e len() para calcular o tamanho da lista de pedidos e depois soma 1 a ela,
+        # esse valor se torna o código do pedido, quando ele for adicionado a lista, seu código será também seu index
+        # a numeração do pedido começa de 1 até n
+        codido_pedido = int(len(pedidos)) + 1
+        
+        # Atráves desse return o código cria um objeto do tipo pedido
+        return Pedido(codido_pedido, endereco_pedido)
+    except ValueError as ve:
+        print(f"Erro de valor: {ve}")
+    except Exception as e:
+        print(f"Ocorreu um erro: {e}")
 
 #Função Exibir Pedidos Em Aberto: Mostra todos os pedidos cujo status não foi alterado para encerrado ainda
 def exibe_pedidos_em_aberto():
@@ -72,20 +81,26 @@ def exibe_pedidos_em_aberto():
 #Função Finalizar Pedido: Resumidamente, altera o status de um pedido para fechado e gera sua nota fiscal
 def finalizar_pedido():
     #chama a função exibir pedidos em aberto para que o usuário possa ver que pedidos ainda não foram finalizados
-    exibe_pedidos_em_aberto();
+    exibe_pedidos_em_aberto()
     #armazena o código do pedido numa variável "selecao"
     selecao = int(input('O pedido que está prestes a finalizar não poderá ser modificado! Insira o CODIGO do Pedido a finalizar: '))
     #muda o statsus do pedido cujo código é "selecao" para fechado, alterando o atributo status de 0 para 1
-    pedido_atual = buscar_pedido_por_codigo(selecao)
-    pedido_atual._status = 1
-    print('Pedido finalizado com sucesso! \nAgora insira os dados do cliente e funcionário. \n')
-    cliente_atual = cadastrar_cliente()
-    funcionario_atual = cadastrar_funcionario()
-    #cria um objeto do tipo nota e armazena ele numa varíavel "nota_atual"
-    nota_atual = Nota(pedido_atual, cliente_atual, funcionario_atual)
-    print('Nota gerada com sucesso! \n' + nota_atual.toString())
-    #adciona a nota armazenada na variável "nota_atual" a lista "historico_notas"
-    historico_notas.append(nota_atual)
+    for pedido in pedidos.values():
+        if pedido._codigo_pedido == selecao:
+            pedido_atual = buscar_pedido_por_codigo(selecao)
+            pedido_atual._status = 1
+            print('Pedido finalizado com sucesso! \nAgora insira os dados do cliente e funcionário. \n')
+            cliente_atual = cadastrar_cliente()
+            funcionario_atual = cadastrar_funcionario()
+            #cria um objeto do tipo nota e armazena ele numa varíavel "nota_atual"
+            nota_atual = Nota(pedido_atual, cliente_atual, funcionario_atual)
+            print('Nota gerada com sucesso! \n' + nota_atual.toString())
+            #adciona a nota armazenada na variável "nota_atual" a lista "historico_notas"
+            historico_notas.append(nota_atual)
+            pedido=None
+        break
+    else:
+        print('Pedido não encontrado!')
 
 #função Adicionar Item Ao Pedido: Vai criar um objeto do tipo item do pedido (classe complexa) e adicionar ele a um vetor contendo todos os itens do pedido
 def pedido_adicionar_item():
@@ -114,22 +129,22 @@ def pedido_remover_item():
     # verifica se pedido existe
     if buscar_pedido_por_codigo(int_pedido_selecionado):
         pedido = pedidos[int_pedido_selecionado]
-        int_codigo_item = int(input('Informe o número do item para remover deste pedido ' + str(pedido._codigo_pedido) + ': '))
+        int_codigo_item = int(input('Informe o código do item para remover deste pedido ' + str(pedido._codigo_pedido) + ': '))
         # verifica se número item informado existe
         item_pedido = None
         for item in pedido._itens_pedidos:
             if item._produto._codigo_produto == int_codigo_item:
                 item_pedido = pedido._itens_pedidos.index(item)
                 break  # Exit the loop once the item is found
-        if item_pedido:
+        if item_pedido is not None:
             pedido.remover_item_pedido(item_pedido)
             print("Item removido com sucesso!")
+            return True
         else:
             print("Item não encontrado no pedido.")
     else:
         print("Pedido inexistente")
         return False
-
 #função Listar Itens do Pedido: Exibe na tela todos os elementos da lista de itens de um determinado pedido
 def pedido_listar_items():
     int_pedido_selecionado = int(input('Informe o código do pedido para mais detalhes: '))
@@ -145,19 +160,28 @@ def pedido_listar_items():
 
 #Função Cadastrar Endereço: pede ao usuário os dados que comporão os atributos de um objeto do tipo endereço e finaliza criando o tal objeto
 def cadastrar_endereco():
-    str_cep = str(input('Informe o cep do endereço: '))
-    str_rua = str(input('Informe a rua: '))
-    int_num = int(input('Informe o número: '))
-    str_complemento = str(input('Informe o complemento do endereço: '))
-    str_bairro = str(input('Informe o bairro: '))
-    str_cidade = str(input('Informe a cidade: '))
-    endereco = Endereco(str_cep, str_rua, int_num,
-                        str_complemento, str_bairro, str_cidade)
-    return endereco
-
+    try:
+        str_cep = str(input('Informe o cep do endereço: '))
+        str_rua = str(input('Informe a rua: '))
+        int_num = int(input('Informe o número: '))
+        str_complemento = str(input('Informe o complemento do endereço: '))
+        str_bairro = str(input('Informe o bairro: '))
+        str_cidade = str(input('Informe a cidade: '))
+        
+        endereco = Endereco(str_cep, str_rua, int_num,
+                            str_complemento, str_bairro, str_cidade)
+        return endereco
+    except ValueError as ve:
+        print(f"Erro de valor: {ve}")
+    except Exception as e:
+        print(f"Ocorreu um erro: {e}")
 #Função Cadastrar Produto: pede ao usuário os dados que comporão os atributos de um objeto do tipo produto e finaliza criando o tal obejto
 def cadastrar_produto():
     int_codigo = int(input('Informe o código identificador do produto: '))
+    for produto in estoque_produtos:
+        if produto._codigo_produto == int_codigo:
+            print("Produto já cadastrado!")
+            return False
     str_nome = str(input('Qual o nome/descrição do produto? '))
     flt_preco = float(input('Informe o valor (ex. 0.00): '))
     date_validade = (input('Informe a validade do produto (formato dd/mm/aaaa): '))
@@ -226,7 +250,7 @@ def writeAndCleanSave_method(arquivo, registro):
                             line = obj.toStringForSaveLoadMethod()
                             file.write(line + '\n')
             else:
-                print("{registro} vazio, não há nada para salvar")
+                print((f'{registro} vazio, não há nada para salvar'))
     except IOError:
         print(f"Erro: Não foi possível escrever no arquivo {arquivo}.")
 
