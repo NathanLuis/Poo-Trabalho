@@ -6,7 +6,8 @@ class Nota:
     from datetime import datetime
 
 class Nota:
-    def __init__construtorDoRegistro(self, codigo_pedido, cliente, atendente,horaGerada,valorTotal):
+    @classmethod
+    def construtorDoRegistro(self, codigo_pedido, cliente, atendente,horaGerada,valorTotal):
         self._codigo_pedido = codigo_pedido
         self._cliente = cliente
         self._atendente = atendente
@@ -53,7 +54,7 @@ class Nota:
         return self.__valorTotal
     
     @_valorTotal.setter
-    def _valortotal(self, value):
+    def _valorTotal(self, value):
         self.__valorTotal = value
     
     @property
@@ -82,19 +83,19 @@ class Nota:
         return info_nota
 
     def toStringForSaveLoadMethod(self):
-        return f'{self._pedido._codigo_pedido},{self._cliente._nome},{self._atendente._nome},{self._horaGerada},{self._valorTotal}'
+        return str(f'{self._pedido._codigo_pedido},{self._cliente._nome}, {self._atendente._nome}, {self._horaGerada} , {self._valorTotal}')
 
-
+    @classmethod
     def fromStringToSaveLoadMethod(String):
         try:
             attributes = String.strip().split(',')        
             if len(attributes) ==5:
                 codigo_pedido = int(attributes[0])
-                cliente = attributes[1]
-                atendente = attributes[2]
-                horaGerada = attributes[3]
+                cliente = str(attributes[1])
+                atendente = str(attributes[2])
+                horaGerada = str(attributes[3])
                 valorTotal = float(attributes[4])
-                return Nota.__init__construtorDoRegistro(codigo_pedido, cliente, atendente, horaGerada,valorTotal)
+                return Nota.construtorDoRegistro(codigo_pedido, cliente, atendente, horaGerada , valorTotal)
             else:
                 print(f"Erro na leitura do arquivo {String.strip()}")
                 return None

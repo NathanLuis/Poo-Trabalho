@@ -1,3 +1,8 @@
+# Aplicação de exemplo disciplina POO - UFRB
+# Sistema de controle de pedidos
+# Professor Guilherme Braga Araújo
+
+
 import os
 
 from pyarrow import null
@@ -273,9 +278,7 @@ def readAndLoad_method(arquivo, registro, cls):
 
 
 
-# Aplicação de exemplo disciplina POO - UFRB
-# Sistema de controle de pedidos
-# Professor Guilherme Braga Araújo
+
 
 
 #Cria uma lista histórico_notas para armazernar as notas e dois dicionários, estoque_produtos e pedidos para adicionar os pedidos
