@@ -1,5 +1,8 @@
 from datetime import datetime
 
+from class_pedido import Pedido
+from class_pessoa import Pessoa
+
 
 class Nota:
 
@@ -83,23 +86,32 @@ class Nota:
         return info_nota
 
     def toStringForSaveLoadMethod(self):
-        return str(f'{self._pedido._codigo_pedido},{self._cliente._nome}, {self._atendente._nome}, {self._horaGerada} , {self._valorTotal}')
+        return f'{self._pedido._codigo_pedido},{self._cliente._nome},{self._atendente._nome},{self._horaGerada},{self._valorTotal}'
 
-    @classmethod
-    def fromStringToSaveLoadMethod(String):
+    @staticmethod
+    def fromStringToSaveLoadMethod(string):
         try:
-            attributes = String.strip().split(',')        
+            attributes = string.strip().split(',')        
             if len(attributes) ==5:
                 codigo_pedido = int(attributes[0])
                 cliente = str(attributes[1])
                 atendente = str(attributes[2])
                 horaGerada = str(attributes[3])
+                horaObj = datetime.strptime(horaGerada, "%Y-%m-%d %H:%M:%S")
                 valorTotal = float(attributes[4])
-                return Nota.construtorDoRegistro(codigo_pedido, cliente, atendente, horaGerada , valorTotal)
+                
+
+                newCliente = Pessoa(cliente, None, None, None, None)
+                newAtendente = Pessoa(atendente, None, None, None, None)
+                pedido = Pedido(codigo_pedido, None)
+                nota = Nota(pedido, newCliente, newAtendente)  # Placeholder values
+                nota.construtorDoRegistro(codigo_pedido, newCliente, newAtendente, horaGerada, valorTotal)
+                return nota
+                
             else:
-                print(f"Erro na leitura do arquivo {String.strip()}")
+                print(f"Erro na leitura do arquivo {string.strip()}")
                 return None
         except Exception as e:
-            print(f'Erro na leitura do arquivo {String.strip()}')
+            print(f'Erro na leitura do arquivo {string.strip()}')
             print(f'Erro: {e}')
 # Observar a funcinalidade da função calcular valor total e o toSting se está implementao corretamente

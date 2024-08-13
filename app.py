@@ -48,12 +48,18 @@ def menu_pedido(): # MENU PEDIDOS
 
 #Função Exibir Notas: Vai mostrar na tela todas as notas fiscais geradas pelo programa até o momento
 def exibe_notas():
-    count = 1
-    #usando um for para exibir todas as posições de um vetor onde as notas são armazeadas em ordem
-    for iterado in historico_notas:
-        print('\nNota Nº ' + str(count))
-        print(iterado.toString())
-        count += 1
+    try:
+        count = 1
+        #usando um for para exibir todas as posições de um vetor onde as notas são armazeadas em ordem
+        if historico_notas: 
+            for iterado in historico_notas:
+                print('\nNota Nº ' + str(count))
+                print(iterado.toString())
+                count += 1
+        else:
+            print("Registro vazio!")
+    except Exception as e:
+        print(e)
 
 #Função Adicionar Pedidos: Essa função vai criar e cadastrar novos pedidos
 def pedido_adicionar():
@@ -85,28 +91,41 @@ def exibe_pedidos_em_aberto():
 
 #Função Finalizar Pedido: Resumidamente, altera o status de um pedido para fechado e gera sua nota fiscal
 def finalizar_pedido():
-    #chama a função exibir pedidos em aberto para que o usuário possa ver que pedidos ainda não foram finalizados
-    exibe_pedidos_em_aberto()
-    #armazena o código do pedido numa variável "selecao"
-    selecao = int(input('O pedido que está prestes a finalizar não poderá ser modificado! Insira o CODIGO do Pedido a finalizar: '))
-    #muda o statsus do pedido cujo código é "selecao" para fechado, alterando o atributo status de 0 para 1
-    for pedido in pedidos.values():
-        if pedido._codigo_pedido == selecao:
-            pedido_atual = buscar_pedido_por_codigo(selecao)
-            pedido_atual._status = 1
-            print('Pedido finalizado com sucesso! \nAgora insira os dados do cliente e funcionário. \n')
-            cliente_atual = cadastrar_cliente()
-            funcionario_atual = cadastrar_funcionario()
-            #cria um objeto do tipo nota e armazena ele numa varíavel "nota_atual"
-            nota_atual = Nota(pedido_atual, cliente_atual, funcionario_atual)
-            print('Nota gerada com sucesso! \n' + nota_atual.toString())
-            #adciona a nota armazenada na variável "nota_atual" a lista "historico_notas"
-            historico_notas.append(nota_atual)
-            pedido=None
-        break
-    else:
-        print('Pedido não encontrado!')
-
+    try:
+        # chama a função exibir pedidos em aberto para que o usuário possa ver que pedidos ainda não foram finalizados
+        exibe_pedidos_em_aberto()
+        
+        # armazena o código do pedido numa variável "selecao"
+        selecao = int(input('O pedido que está prestes a finalizar não poderá ser modificado! Insira o CODIGO do Pedido a finalizar: '))
+        
+        # muda o statsus do pedido cujo código é "selecao" para fechado, alterando o atributo status de 0 para 1
+        for pedido in pedidos.values():
+            if pedido._codigo_pedido == selecao:
+                try:
+                    pedido_atual = buscar_pedido_por_codigo(selecao)
+                    pedido_atual._status = 1
+                    print('Pedido finalizado com sucesso! \nAgora insira os dados do cliente e funcionário. \n')
+                    
+                    cliente_atual = cadastrar_cliente()
+                    funcionario_atual = cadastrar_funcionario()
+                    
+                    # cria um objeto do tipo nota e armazena ele numa varíavel "nota_atual"
+                    nota_atual = Nota(pedido_atual, cliente_atual, funcionario_atual)
+                    print('Nota gerada com sucesso! \n' + nota_atual.toString())
+                    
+                    # adciona a nota armazenada na variável "nota_atual" a lista "historico_notas"
+                    historico_notas.append(nota_atual)
+                    pedido = None
+                except Exception as e:
+                    print(f"Erro ao processar o pedido: {e}")
+                break
+        else:
+            print('Pedido não encontrado!')
+    except ValueError:
+        print("Erro: Código do pedido inválido.")
+    except Exception as e:
+        print(f"Erro inesperado: {e}")
+        
 #função Adicionar Item Ao Pedido: Vai criar um objeto do tipo item do pedido (classe complexa) e adicionar ele a um vetor contendo todos os itens do pedido
 def pedido_adicionar_item():
     int_pedido_selecionado = int(input('Informe o código do pedido para adicionar um novo item: '))
