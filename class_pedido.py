@@ -59,6 +59,9 @@ class Pedido:
             print("Item adicionado ao pedido com sucesso!")
 
     def remover_item_pedido(self, itempedido):
+        if self.__status == 1:
+            print("Erro: Não é possível remover itens de um pedido fechado.")
+            return
         self.__itens_pedidos.pop(itempedido)
 
     def quantidade_itens_pedido(self):
