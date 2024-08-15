@@ -42,6 +42,10 @@ class Pedido:
         self.__itens_pedidos = value
 
     def adicionar_item_ao_pedido(self, itempedido):
+        if self.__status == 1:
+            print("Erro: Não é possível adicionar itens a um pedido fechado.")
+            return
+        
         item_found = False
         for item in self.__itens_pedidos:
             if item._produto._codigo_produto == itempedido._produto._codigo_produto:
