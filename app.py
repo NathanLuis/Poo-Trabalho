@@ -100,6 +100,10 @@ def finalizar_pedido():
         
         # muda o statsus do pedido cujo código é "selecao" para fechado, alterando o atributo status de 0 para 1
         for pedido in pedidos.values():
+            if pedido._codigo_pedido == selecao and pedido._status == 1:
+                print('Erro: O pedido já foi finalizado!')
+                return
+            
             if pedido._codigo_pedido == selecao:
                 try:
                     pedido_atual = buscar_pedido_por_codigo(selecao)
