@@ -203,31 +203,47 @@ def cadastrar_endereco():
         print(f"Erro de valor: {ve}")
     except Exception as e:
         print(f"Ocorreu um erro: {e}")
+
 #Função Cadastrar Produto: pede ao usuário os dados que comporão os atributos de um objeto do tipo produto e finaliza criando o tal obejto
 def cadastrar_produto():
-    int_codigo = int(input('Informe o código identificador do produto: '))
-    for produto in estoque_produtos:
-        if produto._codigo_produto == int_codigo:
-            print("Produto já cadastrado!")
-            return False
-    str_nome = str(input('Qual o nome/descrição do produto? '))
-    flt_preco = float(input('Informe o valor (ex. 0.00): '))
-    date_validade = (input('Informe a validade do produto (formato dd/mm/aaaa): '))
-    date_validade = datetime.strptime(date_validade, '%d/%m/%Y')
-    return Produto(int_codigo, str_nome, flt_preco, date_validade)
+    try:
+        int_codigo = int(input('Informe o código identificador do produto: '))
+        for produto in estoque_produtos:
+            if produto._codigo_produto == int_codigo:
+                print("Produto já cadastrado!")
+                return False
+        str_nome = str(input('Qual o nome/descrição do produto? '))
+        flt_preco = float(input('Informe o valor (ex. 0.00): '))
+        date_validade = input('Informe a validade do produto (formato dd/mm/aaaa): ')
+        date_validade = datetime.strptime(date_validade, '%d/%m/%Y')
 
+        return Produto(int_codigo, str_nome, flt_preco, date_validade)
+    except ValueError as e:
+        print(f"Por favor, insira dados válidos.")
+        return False
+    except Exception as e:
+        print(f" Tente novamente.")
+        return False
 #Função Remover Produdo: Busca um objeto do tipo produto pelo seu código e o apaga do dicionário estoque de produtos
 def remover_produto():
-    codigo_remocao = int(input('Informe o código do produto para remoção: '))
-    produto_remover = None
-    for produto in estoque_produtos:
-        if produto._codigo_produto == codigo_remocao:
-            produto_remover = produto
-            if produto_remover:
-                print("Produto (" + produto_remover._descricao + ") removido!")
-                estoque_produtos.remove(produto_remover)
+    try:
+        codigo_remocao = int(input('Informe o código do produto para remoção: '))
+        produto_remover = None
+        for produto in estoque_produtos:
+            if produto._codigo_produto == codigo_remocao:
+                produto_remover = produto
+                break  # Interrompe o loop se o produto for encontrado
+
+        if produto_remover:
+            print("Produto (" + produto_remover._descricao + ") removido!")
+            estoque_produtos.remove(produto_remover)
         else:
             print("Produto não encontrado!")
+
+    except ValueError as e:
+        print(f"Por favor, insira um código numérico válido.")
+    except Exception as e:
+        print(f"Ocorreu um erro: {e}. Tente novamente.")
     
     
 
@@ -373,15 +389,26 @@ while True:
         remover_produto()
     # opc 4
     elif (opcao_escolhida == "4"):
-        int_codigo_produto = int(input('Informe o código do produto para busca: '))
-        produto_pesquisa = buscar_produto_por_codigo(int_codigo_produto)
-        if (produto_pesquisa):
-            print("Produto encontrado:")
-            print(">Código=" + str(produto_pesquisa._codigo_produto))
-            print(">Descricao=" + produto_pesquisa._descricao)
-            print(">Valor=" + str(produto_pesquisa._preco))
-            print(">Validade=" + str(produto_pesquisa._validade))
-        else:
-            print("Produto nâo cadastrado/encontrado.")
+        try:
+            int_codigo_produto = int(input('Informe o código do produto para busca: '))
+            
+            # Assume-se que a função buscar_produto_por_codigo pode gerar exceções
+            produto_pesquisa = buscar_produto_por_codigo(int_codigo_produto)
+            
+            if produto_pesquisa:
+                print("Produto encontrado:")
+                print(">Código=" + str(produto_pesquisa._codigo_produto))
+                print(">Descrição=" + produto_pesquisa._descricao)
+                print(">Valor=" + str(produto_pesquisa._preco))
+                print(">Validade=" + str(produto_pesquisa._validade))
+            else:
+                print("Produto não cadastrado/encontrado.")
+        
+        except ValueError:
+            print("Erro: Código do produto deve ser um número inteiro.")
+        
+        except Exception as e:
+            print(f"Ocorreu um erro ao buscar o produto: {str(e)}")
+    
     else:
         print("A opção escolhida é inválida.")
