@@ -97,7 +97,7 @@ class Nota:
                 cliente = str(attributes[1])
                 atendente = str(attributes[2])
                 horaGerada = str(attributes[3])
-                horaObj = datetime.strptime(horaGerada, "%Y-%m-%d %H:%M:%S")
+                #horaObj = datetime.strptime(horaGerada, "%Y-%m-%d %H:%M:%S")
                 valorTotal = float(attributes[4])
                 
 
@@ -105,7 +105,9 @@ class Nota:
                 newAtendente = Pessoa(atendente, None, None, None, None)
                 pedido = Pedido(codigo_pedido, None)
                 nota = Nota(pedido, newCliente, newAtendente)  # Placeholder values
-                nota.construtorDoRegistro(codigo_pedido, newCliente, newAtendente, horaGerada, valorTotal)
+                #nota.construtorDoRegistro(codigo_pedido, newCliente, newAtendente, horaGerada, valorTotal)
+                nota._horaGerada=horaGerada
+                nota._valorTotal=valorTotal
                 return nota
                 
             else:
